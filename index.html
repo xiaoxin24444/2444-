@@ -293,62 +293,62 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>馃攼 鍦ㄧ嚎瀵嗙爜鐢熸垚鍣?/h1>
-            <p>瀹夊叏銆侀殢鏈恒€佷究鎹风殑瀵嗙爜鐢熸垚宸ュ叿</p>
+            <h1>Password Generator</h1>
+            <p>Secure, random, convenient password tool</p>
         </div>
 
         <div class="password-display">
-            <input type="text" id="passwordOutput" class="password-input" readonly placeholder="鐐瑰嚮鐢熸垚瀵嗙爜">
-            <button id="copyBtn" class="copy-btn">澶嶅埗</button>
+            <input type="text" id="passwordOutput" class="password-input" readonly placeholder="Click to generate">
+            <button id="copyBtn" class="copy-btn">Copy</button>
         </div>
 
         <div class="length-control">
             <div class="length-label">
-                <span>瀵嗙爜闀垮害</span>
+                <span>Password Length</span>
                 <span class="length-value" id="lengthValue">16</span>
             </div>
             <input type="range" id="lengthSlider" min="4" max="32" value="16">
         </div>
 
         <div class="options">
-            <div class="options-title">瀛楃绫诲瀷</div>
+            <div class="options-title">Character Types</div>
             <label class="option-item">
                 <input type="checkbox" id="uppercase" checked>
-                <span class="option-label">澶у啓瀛楁瘝</span>
+                <span class="option-label">Uppercase</span>
                 <span class="option-sample">A-Z</span>
             </label>
             <label class="option-item">
                 <input type="checkbox" id="lowercase" checked>
-                <span class="option-label">灏忓啓瀛楁瘝</span>
+                <span class="option-label">Lowercase</span>
                 <span class="option-sample">a-z</span>
             </label>
             <label class="option-item">
                 <input type="checkbox" id="numbers" checked>
-                <span class="option-label">鏁板瓧</span>
+                <span class="option-label">Numbers</span>
                 <span class="option-sample">0-9</span>
             </label>
             <label class="option-item">
                 <input type="checkbox" id="symbols">
-                <span class="option-label">鐗规畩绗﹀彿</span>
+                <span class="option-label">Symbols</span>
                 <span class="option-sample">!@#$%</span>
             </label>
         </div>
 
         <div class="strength-indicator">
-            <span class="strength-label">瀵嗙爜寮哄害</span>
+            <span class="strength-label">Password Strength</span>
             <div class="strength-bar">
                 <div class="strength-segment" id="segment1"></div>
                 <div class="strength-segment" id="segment2"></div>
                 <div class="strength-segment" id="segment3"></div>
                 <div class="strength-segment" id="segment4"></div>
             </div>
-            <div class="strength-text" id="strengthText">璇峰厛鐢熸垚瀵嗙爜</div>
+            <div class="strength-text" id="strengthText">Generate first</div>
         </div>
 
-        <button id="generateBtn" class="generate-btn">鐢熸垚瀵嗙爜</button>
+        <button id="generateBtn" class="generate-btn">Generate Password</button>
 
         <div class="footer">
-            鐢熸椿鏁堢巼宸ュ叿绠?路 瀹夊叏鍙潬
+            Productivity Toolbox 路 Secure & Reliable
         </div>
     </div>
 
@@ -390,7 +390,7 @@
             const charset = getCharacterSet();
 
             if (!charset) {
-                alert('璇疯嚦灏戦€夋嫨涓€绉嶅瓧绗︾被鍨?);
+                alert('Please select at least one character type');
                 return;
             }
 
@@ -418,9 +418,9 @@
             if (/[0-9]/.test(password)) score++;
             if (/[^a-zA-Z0-9]/.test(password)) score++;
 
-            if (score <= 2) return { level: 'weak', text: '寮? };
-            if (score <= 4) return { level: 'medium', text: '涓? };
-            return { level: 'strong', text: '寮? };
+            if (score <= 2) return { level: 'weak', text: 'Weak' };
+            if (score <= 4) return { level: 'medium', text: 'Medium' };
+            return { level: 'strong', text: 'Strong' };
         }
 
         function updateStrength(password) {
@@ -443,21 +443,21 @@
 
         async function copyPassword() {
             if (!passwordOutput.value) {
-                alert('璇峰厛鐢熸垚瀵嗙爜');
+                alert('Please generate a password first');
                 return;
             }
 
             try {
                 await navigator.clipboard.writeText(passwordOutput.value);
-                copyBtn.textContent = '宸插鍒?';
+                copyBtn.textContent = 'Copied!';
                 copyBtn.classList.add('copied');
 
                 setTimeout(() => {
-                    copyBtn.textContent = '澶嶅埗';
+                    copyBtn.textContent = 'Copy';
                     copyBtn.classList.remove('copied');
                 }, 2000);
             } catch (err) {
-                alert('澶嶅埗澶辫触锛岃鎵嬪姩澶嶅埗');
+                alert('Copy failed, please copy manually');
             }
         }
 
