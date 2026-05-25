@@ -1,0 +1,1390 @@
+/* ===================================
+   在线密码生成器工具箱 - 样式文件
+   版本：v1.4 - 视觉动效增强版
+   =================================== */
+
+/* ===================================
+   基础重置
+   =================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 优化触摸选择体验 */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+/* 禁用文本选择（除了特定元素） */
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* ===================================
+   页面背景增强
+   =================================== */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    /* 添加微妙的背景纹理 */
+    background-attachment: fixed;
+}
+
+/* 增强应用容器阴影 */
+.app-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* ===================================
+   标签导航样式增强
+   =================================== */
+.tab-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 0;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    /* 增强玻璃拟态效果 */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    /* 优化触摸区域 */
+    min-height: 44px;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.95);
+    transform: translateY(-1px);
+}
+
+.tab-btn.active {
+    background: white;
+    color: #667eea;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+/* ===================================
+   工具容器样式 - 增强版
+   =================================== */
+.tool-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-panel {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(102, 126, 234, 0.1);
+    padding: 40px;
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s;
+    overflow-y: auto;
+    max-height: 80vh;
+    /* 增强视觉层次 */
+    border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.tool-panel.active {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
+    transform: translateY(0);
+}
+
+/* 页面切换动画类 - 增强版 */
+.tool-panel.fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 数据变化淡入淡出效果 */
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* 密码显示淡入效果 */
+.password-input.fade-in,
+.calc-display.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* ===================================
+   通用头部样式 - 增强版
+   =================================== */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 16px;
+    border-radius: 20px;
+    object-fit: cover;
+    /* 添加图标阴影 */
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    /* 图标悬浮效果 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header-icon:hover {
+    transform: scale(1.05) rotate(3deg);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.header h1 {
+    color: #333;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.header p {
+    color: #666;
+    font-size: 14px;
+}
+
+/* ===================================
+   密码生成器样式
+   =================================== */
+.password-display {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.password-input {
+    width: 100%;
+    padding: 16px 60px 16px 16px;
+    font-size: 18px;
+    font-family: 'Courier New', monospace;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background: #fafafa;
+}
+
+.password-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.copy-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    /* 触摸优化 */
+    min-height: 44px;
+    min-width: 60px;
+}
+
+.copy-btn:hover {
+    transform: translateY(-50%) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.copy-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.copy-btn.copied {
+    background: #10b981;
+}
+
+.length-control {
+    margin-bottom: 25px;
+}
+
+.length-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.length-value {
+    color: #667eea;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+input[type="range"] {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #e0e0e0;
+    border-radius: 3px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: #667eea;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: #667eea;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.options {
+    margin-bottom: 25px;
+}
+
+.options-title {
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: background 0.3s;
+}
+
+.option-item:hover {
+    background: #f1f3f4;
+}
+
+.option-item:last-child {
+    margin-bottom: 0;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #667eea;
+    margin-right: 14px;
+}
+
+.option-label {
+    color: #333;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.option-sample {
+    margin-left: auto;
+    color: #999;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+}
+
+.strength-indicator {
+    margin-bottom: 25px;
+}
+
+.strength-label {
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.strength-bar {
+    display: flex;
+    gap: 6px;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #f0f0f0;
+}
+
+.strength-segment {
+    flex: 1;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.strength-segment.weak {
+    background: #ef4444;
+}
+
+.strength-segment.medium {
+    background: #f59e0b;
+}
+
+.strength-segment.strong {
+    background: #10b981;
+}
+
+.strength-text {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.strength-text.weak {
+    color: #ef4444;
+}
+
+.strength-text.medium {
+    color: #f59e0b;
+}
+
+.strength-text.strong {
+    color: #10b981;
+}
+
+.generate-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    /* 触摸优化 */
+    min-height: 44px;
+    /* 增强阴影 */
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.generate-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.generate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.generate-btn:hover::before {
+    left: 100%;
+}
+
+.generate-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* ===================================
+   计算器样式
+   =================================== */
+.calculator {
+    margin: 0 auto;
+}
+
+.calc-display {
+    width: 100%;
+    padding: 20px;
+    font-size: 36px;
+    font-family: 'Courier New', monospace;
+    text-align: right;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    outline: none;
+    margin-bottom: 20px;
+    background: #fafafa;
+    color: #333;
+    transition: border-color 0.3s;
+}
+
+.calc-display:focus {
+    border-color: #667eea;
+}
+
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.calc-btn {
+    padding: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #f5f5f5;
+    color: #333;
+    /* 触摸优化 */
+    min-height: 44px;
+    /* 增强阴影 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calc-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.calc-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calc-btn.number {
+    background: #ffffff;
+    border: 2px solid #e0e0e0;
+}
+
+.calc-btn.number:hover {
+    background: #f8f9fa;
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.calc-btn.operator {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.calc-btn.operator:hover {
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.calc-btn.function {
+    background: #f0f0f0;
+    color: #667eea;
+}
+
+.calc-btn.function:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+}
+
+.calc-btn.equals {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.calc-btn.equals:hover {
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.calc-btn.zero {
+    grid-column: span 1;
+}
+
+/* ===================================
+   历史记录样式
+   =================================== */
+.calc-history {
+    margin-top: 20px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.history-header span {
+    font-weight: 600;
+    color: #333;
+    font-size: 16px;
+}
+
+.history-clear {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.history-clear:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-empty {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    padding: 20px;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.history-item:hover {
+    background: #f0f0f0;
+    border-color: #667eea;
+    transform: translateX(4px);
+}
+
+.history-expression {
+    color: #666;
+    font-size: 14px;
+    font-family: 'Courier New', monospace;
+    flex: 1;
+    margin-right: 12px;
+}
+
+.history-result {
+    color: #667eea;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: 'Courier New', monospace;
+}
+
+/* ===================================
+   页脚样式
+   =================================== */
+.footer {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #999;
+    font-size: 13px;
+}
+
+/* ===================================
+   响应式设计 - 增强移动端体验
+   =================================== */
+@media screen and (max-width: 520px) {
+    body {
+        padding: 15px;
+        /* 优化移动端滚动 */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .app-container {
+        padding: 0;
+    }
+
+    .tool-panel {
+        padding: 30px 25px;
+        border-radius: 16px;
+        /* 移动端优化滚动 */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .header-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 16px;
+    }
+
+    .password-input {
+        font-size: 16px;
+        padding: 14px 50px 14px 14px;
+    }
+
+    .copy-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+
+    .calc-display {
+        font-size: 28px;
+        padding: 16px;
+    }
+
+    .calc-btn {
+        padding: 16px;
+        font-size: 20px;
+    }
+    
+    /* 移动端按钮优化 */
+    .generate-btn,
+    .copy-btn,
+    .calc-btn,
+    .tab-btn {
+        min-height: 48px; /* 更大的触摸区域 */
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .tool-panel {
+        padding: 25px 20px;
+        border-radius: 14px;
+    }
+
+    .tab-nav {
+        border-radius: 16px;
+        padding: 5px;
+    }
+
+    .tab-btn {
+        padding: 12px 16px;
+        font-size: 14px;
+        border-radius: 12px;
+    }
+
+    .header h1 {
+        font-size: 22px;
+    }
+
+    .header p {
+        font-size: 13px;
+    }
+
+    .header-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .calc-btn {
+        padding: 14px;
+        font-size: 18px;
+    }
+    
+    /* 优化小屏幕按钮 */
+    .generate-btn,
+    .copy-btn,
+    .calc-btn {
+        padding: 14px;
+        font-size: 16px;
+    }
+}
+
+/* ===================================
+   触摸设备优化
+   =================================== */
+@media (hover: none) and (pointer: coarse) {
+    /* 触摸设备禁用悬停效果，改用按下效果 */
+    .tab-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: none;
+    }
+    
+    .tab-btn:active {
+        background: rgba(255, 255, 255, 0.25);
+    }
+    
+    button:hover {
+        transform: none;
+    }
+    
+    /* 触摸设备显示反馈 */
+    button:active {
+        transform: scale(0.98);
+    }
+    
+    .generate-btn:active {
+        transform: scale(0.98);
+    }
+    
+    .calc-btn:hover {
+        transform: scale(1);
+    }
+    
+    .calc-btn:active {
+        transform: scale(0.95);
+    }
+}
+
+/* ===================================
+   高对比度模式支持
+   =================================== */
+@media (prefers-contrast: high) {
+    .tool-panel {
+        border: 2px solid #333;
+    }
+    
+    button {
+        border: 2px solid currentColor;
+    }
+}
+
+/* ===================================
+   减少动画偏好支持
+   =================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===================================
+   Toast 提示样式 - 完整版
+   =================================== */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #10b981;
+    color: white;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease;
+    pointer-events: auto;
+    /* 增强视觉效果 */
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    max-width: 90%;
+    text-align: center;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* Toast 滑入动画 */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Toast 淡出动画 */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+}
+
+.toast.fade-out {
+    animation: fadeOut 0.3s ease-out forwards;
+}
+
+/* Toast 类型样式 */
+.toast.success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.toast.error {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.toast.info {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Toast 图标 */
+.toast::before {
+    content: '✓';
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.toast.error::before {
+    content: '✕';
+}
+
+.toast.info::before {
+    content: 'ℹ';
+}
+
+/* ===================================
+   动画和过渡效果 - 增强版
+   =================================== */
+.tool-panel {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-btn {
+    transition-timing-function: ease;
+}
+
+/* 密码输入框和按钮的加载动画 */
+.password-input,
+.copy-btn,
+.generate-btn {
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 计算器按钮网格动画 */
+.calc-buttons {
+    animation: slideIn 0.6s ease-out 0.1s both;
+}
+
+/* 密码强度条动画 */
+.strength-bar {
+    animation: slideIn 0.5s ease-out 0.2s both;
+}
+
+/* 选项列表动画 */
+.options {
+    animation: slideIn 0.5s ease-out 0.15s both;
+}
+
+/* ===================================
+   加载状态提示 - 新增
+   =================================== */
+.loading {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* 按钮加载状态 */
+button.loading {
+    pointer-events: none;
+    position: relative;
+}
+
+button.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===================================
+   视觉细节增强 - 新增
+   =================================== */
+
+/* 选项项悬停效果 */
+.option-item {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.option-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.05), transparent);
+    transition: left 0.3s;
+}
+
+.option-item:hover::before {
+    left: 100%;
+}
+
+/* 滑块增强 */
+input[type="range"] {
+    position: relative;
+    background: linear-gradient(90deg, #e0e0e0, #667eea);
+    border-radius: 3px;
+    height: 8px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.6);
+}
+
+/* 强度条渐变效果 */
+.strength-segment {
+    position: relative;
+    overflow: hidden;
+}
+
+.strength-segment::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* 历史记录项增强 */
+.history-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.history-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.history-item:hover::before {
+    opacity: 1;
+}
+
+/* 密码输入框聚焦增强 */
+.password-input:focus,
+.calc-display:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15), 0 4px 12px rgba(102, 126, 234, 0.1);
+}
+
+/* 复选框增强 */
+input[type="checkbox"] {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+}
+
+input[type="checkbox"]:checked {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 计算器显示框增强 */
+.calc-display {
+    font-weight: 600;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+}
+
+/* 按钮点击涟漪效果 */
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+button:active::after {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+}
+
+/* ===================================
+   密码历史记录样式
+   =================================== */
+.password-history {
+    margin-top: 25px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    animation: slideIn 0.5s ease-out 0.3s both;
+}
+
+.password-history .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.password-history .history-header span {
+    font-weight: 600;
+    color: #333;
+    font-size: 16px;
+}
+
+.export-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    /* 触摸优化 */
+    min-height: 36px;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.export-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.export-btn:active {
+    transform: scale(0.95);
+}
+
+.password-history .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.password-history .history-empty {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    padding: 20px;
+}
+
+.password-history .history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.password-history .history-item:hover {
+    background: #f0f0f0;
+    border-color: #667eea;
+    transform: translateX(4px);
+}
+
+.password-history .history-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.password-history .history-item:hover::before {
+    opacity: 1;
+}
+
+.password-history .history-password {
+    color: #333;
+    font-size: 15px;
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    flex: 1;
+}
+
+.password-history .history-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 12px;
+}
+
+.password-history .history-strength {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.password-history .history-strength.weak {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.password-history .history-strength.medium {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.password-history .history-strength.strong {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+.password-history .history-time {
+    color: #999;
+    font-size: 12px;
+}
+
+/* ===================================
+   快捷键提示样式
+   =================================== */
+.shortcut-hints {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 12px 16px;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 8px;
+    flex-wrap: wrap;
+    animation: slideIn 0.5s ease-out 0.4s both;
+}
+
+.shortcut-label {
+    font-weight: 600;
+    color: #667eea;
+    font-size: 13px;
+}
+
+.shortcut-item {
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.shortcut-item kbd {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    color: #333;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+}
+
+/* ===================================
+   响应式 - 历史记录和快捷键
+   =================================== */
+@media screen and (max-width: 520px) {
+    .password-history {
+        padding: 12px;
+        margin-top: 20px;
+    }
+    
+    .password-history .history-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .export-btn {
+        width: 100%;
+    }
+    
+    .password-history .history-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .password-history .history-meta {
+        margin-left: 0;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .shortcut-hints {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .shortcut-item {
+        font-size: 11px;
+    }
+}

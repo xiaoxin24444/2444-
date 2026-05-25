@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码生成器测试</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tool="password-generator">密码生成器</button>
+            <button class="tab-btn" data-tool="test">功能测试</button>
+        </nav>
+
+        <main class="tool-container">
+            <!-- 密码生成器工具 -->
+            <section id="password-generator" class="tool-panel active">
+                <div class="header">
+                    <h1>🔐 在线密码生成器</h1>
+                    <p>安全、随机、便捷的密码生成工具</p>
+                </div>
+
+                <div class="password-display">
+                    <input type="text" id="passwordOutput" class="password-input" readonly placeholder="点击生成密码">
+                    <button id="copyBtn" class="copy-btn">复制</button>
+                </div>
+
+                <div class="length-control">
+                    <div class="length-label">
+                        <span>密码长度</span>
+                        <span class="length-value" id="lengthValue">16</span>
+                    </div>
+                    <input type="range" id="lengthSlider" min="4" max="64" value="16">
+                </div>
+
+                <div class="options">
+                    <div class="options-title">字符类型</div>
+                    <label class="option-item">
+                        <input type="checkbox" id="uppercase" checked>
+                        <span class="option-label">大写字母</span>
+                        <span class="option-sample">A-Z</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" id="lowercase" checked>
+                        <span class="option-label">小写字母</span>
+                        <span class="option-sample">a-z</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" id="numbers" checked>
+                        <span class="option-label">数字</span>
+                        <span class="option-sample">0-9</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" id="symbols">
+                        <span class="option-label">特殊符号</span>
+                        <span class="option-sample">!@#$%</span>
+                    </label>
+                </div>
+
+                <div class="strength-indicator">
+                    <span class="strength-label">密码强度</span>
+                    <div class="strength-bar">
+                        <div class="strength-segment" id="segment1"></div>
+                        <div class="strength-segment" id="segment2"></div>
+                        <div class="strength-segment" id="segment3"></div>
+                        <div class="strength-segment" id="segment4"></div>
+                    </div>
+                    <div class="strength-text" id="strengthText">请先生成密码</div>
+                </div>
+
+                <button id="generateBtn" class="generate-btn">生成密码</button>
+
+                <div class="footer">
+                    生活效率工具箱 · 安全可靠
+                </div>
+            </section>
+
+            <!-- 功能测试页面 -->
+            <section id="test" class="tool-panel">
+                <div class="header">
+                    <h1>🧪 功能测试页面</h1>
+                    <p>验证密码生成器的各项功能</p>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #333; margin-bottom: 15px;">1. 批量生成测试</h3>
+                    <button id="batchGenerate" class="generate-btn" style="margin-bottom: 10px;">生成100个密码并验证长度</button>
+                    <div id="testResults" style="font-family: 'Courier New', monospace; font-size: 13px; background: #f5f5f5; padding: 15px; border-radius: 8px; max-height: 200px; overflow-y: auto;"></div>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #333; margin-bottom: 15px;">2. 字符类型验证</h3>
+                    <button id="verifyCharset" class="generate-btn">验证特殊字符密码生成</button>
+                    <div id="charsetResults" style="font-family: 'Courier New', monospace; font-size: 13px; background: #f5f5f5; padding: 15px; border-radius: 8px; margin-top: 10px;"></div>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #333; margin-bottom: 15px;">3. 复制功能测试</h3>
+                    <button id="testCopy" class="generate-btn">测试复制到剪贴板</button>
+                    <div id="copyResults" style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-top: 10px;"></div>
+                </div>
+
+                <div class="footer">
+                    测试页面 · 仅供参考
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast 提示容器 -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+
+    <script>
+        // 测试功能
+        document.addEventListener('DOMContentLoaded', () => {
+            const batchBtn = document.getElementById('batchGenerate');
+            const verifyBtn = document.getElementById('verifyCharset');
+            const copyBtn = document.getElementById('testCopy');
+            const resultsDiv = document.getElementById('testResults');
+            const charsetDiv = document.getElementById('charsetResults');
+            const copyDiv = document.getElementById('copyResults');
+
+            // 批量生成测试
+            batchBtn.addEventListener('click', () => {
+                resultsDiv.innerHTML = '正在生成...<br>';
+                const results = [];
+                let errors = 0;
+
+                for (let i = 0; i < 100; i++) {
+                    // 模拟生成密码
+                    const length = 16;
+                    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    let password = '';
+                    const array = new Uint32Array(length);
+                    crypto.getRandomValues(array);
+                    for (let j = 0; j < length; j++) {
+                        password += charset[array[j] % charset.length];
+                    }
+
+                    if (password.length === 16) {
+                        results.push(`✓ ${i + 1}. ${password}`);
+                    } else {
+                        errors++;
+                        results.push(`✗ ${i + 1}. 长度错误: ${password.length}`);
+                    }
+                }
+
+                resultsDiv.innerHTML = results.slice(0, 20).join('<br>');
+                if (results.length > 20) {
+                    resultsDiv.innerHTML += '<br>... (还有' + (results.length - 20) + '个)';
+                }
+                resultsDiv.innerHTML += `<br><br><strong style="color: ${errors === 0 ? '#10b981' : '#ef4444'};">测试结果: ${errors === 0 ? '全部通过 ✓' : '发现' + errors + '个错误 ✗'}</strong>`;
+            });
+
+            // 字符类型验证
+            verifyBtn.addEventListener('click', () => {
+                charsetDiv.innerHTML = '正在验证特殊字符密码...<br><br>';
+
+                // 生成包含特殊字符的密码
+                const length = 20;
+                const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+                let password = '';
+                const array = new Uint32Array(length);
+                crypto.getRandomValues(array);
+                for (let j = 0; j < length; j++) {
+                    password += charset[array[j] % charset.length];
+                }
+
+                const hasUppercase = /[A-Z]/.test(password);
+                const hasLowercase = /[a-z]/.test(password);
+                const hasNumbers = /[0-9]/.test(password);
+                const hasSymbols = /[^a-zA-Z0-9]/.test(password);
+
+                charsetDiv.innerHTML += `密码: <strong>${password}</strong><br><br>`;
+                charsetDiv.innerHTML += `验证结果:<br>`;
+                charsetDiv.innerHTML += `✓ 大写字母: ${hasUppercase}<br>`;
+                charsetDiv.innerHTML += `✓ 小写字母: ${hasLowercase}<br>`;
+                charsetDiv.innerHTML += `✓ 数字: ${hasNumbers}<br>`;
+                charsetDiv.innerHTML += `✓ 特殊符号: ${hasSymbols}<br><br>`;
+
+                const allPassed = hasUppercase && hasLowercase && hasNumbers && hasSymbols;
+                charsetDiv.innerHTML += `<strong style="color: ${allPassed ? '#10b981' : '#ef4444'};">${allPassed ? '特殊字符密码生成成功 ✓' : '部分字符类型缺失 ✗'}</strong>`;
+            });
+
+            // 复制功能测试
+            copyBtn.addEventListener('click', async () => {
+                copyDiv.innerHTML = '正在测试复制功能...';
+
+                const testPassword = 'TestPassword123!@#';
+                const textarea = document.createElement('textarea');
+                textarea.value = testPassword;
+                document.body.appendChild(textarea);
+                textarea.select();
+
+                try {
+                    document.execCommand('copy');
+                    copyDiv.innerHTML = `<strong style="color: #10b981;">✓ 复制功能正常<br>已复制内容: ${testPassword}</strong><br><br>提示: 请检查剪贴板中是否包含上述密码`;
+                } catch (err) {
+                    copyDiv.innerHTML = `<strong style="color: #ef4444;">✗ 复制功能失败: ${err.message}</strong>`;
+                }
+
+                document.body.removeChild(textarea);
+            });
+        });
+    </script>
+</body>
+</html>
