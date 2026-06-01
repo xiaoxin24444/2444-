@@ -493,53 +493,278 @@ input[type="checkbox"] {
     text-align: center;
 }
 
-.pdf-container {
-    width: 100%;
-    margin: 20px auto 30px;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    box-shadow: var(--shadow-light);
+.resume-header {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border-radius: var(--radius-lg);
+    margin-bottom: 30px;
 }
 
-.pdf-iframe {
-    width: 100%;
-    height: 600px;
-    border: none;
-    display: block;
-    background: var(--bg-color);
-}
-
-.pdf-actions {
+.resume-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
     display: flex;
-    gap: 15px;
+    align-items: center;
     justify-content: center;
-    margin-top: 20px;
-    flex-wrap: wrap;
+    font-size: 40px;
+    margin: 0 auto 15px;
 }
 
-.download-pdf-btn {
-    display: inline-block;
+.resume-name {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.resume-title {
+    color: rgba(255,255,255,0.9);
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.resume-status {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.status-badge.studying {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+}
+
+.status-badge.education {
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.9);
+}
+
+.resume-contact {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.contact-icon {
+    font-size: 18px;
+}
+
+.contact-text {
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.contact-link {
+    color: var(--primary-color);
     text-decoration: none;
-    padding: 16px 32px;
+    font-size: 14px;
+}
+
+.contact-link:hover {
+    text-decoration: underline;
+}
+
+.resume-section {
+    margin-bottom: 25px;
+}
+
+.section-title {
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.education-card, .work-card, .project-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.edu-header, .work-header, .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.edu-school, .work-company, .project-name {
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.edu-time, .work-time, .project-time {
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.edu-detail, .work-detail, .project-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.edu-major, .work-dept, .project-role {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.edu-college {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.project-desc {
+    margin-top: 10px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.exp-item {
+    display: flex;
+    gap: 12px;
+    padding: 15px;
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.exp-item:hover {
+    border-color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+.exp-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.exp-content p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.achievement-item {
+    text-align: center;
+    padding: 20px 15px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    border-radius: var(--radius-md);
+}
+
+.achievement-num {
+    display: block;
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.achievement-label {
+    display: block;
+    color: rgba(255,255,255,0.9);
+    font-size: 12px;
+}
+
+.skills-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.skill-category h4 {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.skill-tag {
+    padding: 8px 16px;
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.skill-tag.soft {
+    background: var(--primary-light);
+    color: var(--primary-dark);
 }
 
 @media (max-width: 768px) {
-    .pdf-iframe {
-        height: 400px;
+    .resume-contact {
+        grid-template-columns: 1fr;
     }
     
-    .pdf-actions {
+    .achievement-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .edu-header, .work-header, .project-header {
         flex-direction: column;
-    }
-    
-    .download-pdf-btn {
-        width: 100%;
+        gap: 5px;
     }
 }
 
 @media (max-width: 480px) {
-    .pdf-iframe {
-        height: 300px;
+    .resume-name {
+        font-size: 24px;
+    }
+    
+    .achievement-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .achievement-num {
+        font-size: 24px;
     }
 }
 
