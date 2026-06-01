@@ -3,105 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>在线密码生成器</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .container { background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); padding: 40px; width: 100%; max-width: 500px; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { color: #333; font-size: 28px; font-weight: 600; margin-bottom: 8px; }
-        .header p { color: #666; font-size: 14px; }
-        .password-display { position: relative; margin-bottom: 25px; }
-        .password-input { width: 100%; padding: 16px 60px 16px 16px; font-size: 18px; font-family: 'Courier New', monospace; border: 2px solid #e0e0e0; border-radius: 12px; outline: none; transition: border-color 0.3s; background: #fafafa; }
-        .password-input:focus { border-color: #667eea; }
-        .copy-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: #667eea; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.3s; }
-        .copy-btn:hover { background: #5a6fd6; }
-        .copy-btn.copied { background: #10b981; }
-        .length-control { margin-bottom: 25px; }
-        .length-label { display: flex; justify-content: space-between; margin-bottom: 12px; color: #333; font-size: 16px; font-weight: 500; }
-        .length-value { color: #667eea; font-weight: 600; }
-        input[type="range"] { width: 100%; height: 6px; -webkit-appearance: none; appearance: none; background: #e0e0e0; border-radius: 3px; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: #667eea; border-radius: 50%; cursor: pointer; }
-        .options { margin-bottom: 25px; }
-        .options-title { color: #333; font-size: 16px; font-weight: 500; margin-bottom: 15px; }
-        .option-item { display: flex; align-items: center; padding: 12px 16px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px; }
-        input[type="checkbox"] { width: 20px; height: 20px; accent-color: #667eea; margin-right: 14px; }
-        .option-label { color: #333; font-size: 15px; }
-        .option-sample { margin-left: auto; color: #999; font-size: 13px; font-family: 'Courier New', monospace; }
-        .strength-indicator { margin-bottom: 25px; }
-        .strength-bar { display: flex; gap: 6px; height: 8px; background: #f0f0f0; border-radius: 4px; }
-        .strength-segment { flex: 1; border-radius: 4px; }
-        .strength-segment.weak { background: #ef4444; }
-        .strength-segment.medium { background: #f59e0b; }
-        .strength-segment.strong { background: #10b981; }
-        .strength-text { margin-top: 8px; font-size: 14px; font-weight: 500; text-align: center; }
-        .generate-btn { width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; }
-        .footer { text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 13px; }
-    </style>
+    <title>在线密码生成器工具箱</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/tools.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header"><h1>在线密码生成器</h1><p>安全、随机、便捷</p></div>
-        <div class="password-display"><input type="text" id="passwordOutput" class="password-input" readonly><button id="copyBtn" class="copy-btn">复制</button></div>
-        <div class="length-control"><div class="length-label"><span>密码长度</span><span class="length-value" id="lengthValue">16</span></div><input type="range" id="lengthSlider" min="4" max="32" value="16"></div>
-        <div class="options"><div class="options-title">字符类型</div><label class="option-item"><input type="checkbox" id="uppercase" checked><span class="option-label">大写字母</span><span class="option-sample">A-Z</span></label><label class="option-item"><input type="checkbox" id="lowercase" checked><span class="option-label">小写字母</span><span class="option-sample">a-z</span></label><label class="option-item"><input type="checkbox" id="numbers" checked><span class="option-label">数字</span><span class="option-sample">0-9</span></label><label class="option-item"><input type="checkbox" id="symbols"><span class="option-label">特殊符号</span><span class="option-sample">!@#$%</span></label></div>
-        <div class="strength-indicator"><span class="strength-label">密码强度</span><div class="strength-bar"><div class="strength-segment" id="segment1"></div><div class="strength-segment" id="segment2"></div><div class="strength-segment" id="segment3"></div><div class="strength-segment" id="segment4"></div></div><div class="strength-text" id="strengthText">请先生成密码</div></div>
-        <button id="generateBtn" class="generate-btn">生成密码</button>
-        <div class="footer">生活效率工具箱 · 安全可靠</div>
+    <div id="app">
+        <div class="header">
+            <h1>🛠️ 生活效率工具箱</h1>
+            <p>安全、便捷、高效的实用工具集</p>
+        </div>
+
+        <div class="container">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-target="password-tab">密码生成器</button>
+                <button class="nav-tab" data-target="todo-tab">待办清单</button>
+                <button class="nav-tab" data-target="lottery-tab">随机抽奖</button>
+                <button class="nav-tab" data-target="stats-tab">使用统计</button>
+                <button class="nav-tab" data-target="about-tab">关于我</button>
+            </div>
+
+            <div class="header-actions">
+                <button class="btn-secondary btn-sm" id="exportBtn">📥 导出数据</button>
+                <button class="btn-secondary btn-sm" id="importBtn">📤 导入数据</button>
+                <label class="toggle-switch" title="切换主题">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span id="themeIcon" class="theme-icon">🌙</span>
+                <input type="file" id="importInput" accept=".json" style="display: none;">
+            </div>
+
+            <div id="password-tab" class="tab-content active">
+                <div class="tool-section">
+                    <h2 class="tool-title">🔐 在线密码生成器</h2>
+                    <p class="tool-desc">安全、随机、便捷的密码生成工具</p>
+                    
+                    <div class="password-display">
+                        <input type="text" id="passwordOutput" class="password-input" readonly>
+                        <button id="copyBtn" class="copy-btn">复制</button>
+                    </div>
+                    
+                    <div class="length-control">
+                        <div class="length-label">
+                            <span>密码长度</span>
+                            <span class="length-value" id="lengthValue">16</span>
+                        </div>
+                        <input type="range" id="lengthSlider" min="4" max="32" value="16">
+                    </div>
+                    
+                    <div class="options">
+                        <div class="options-title">字符类型</div>
+                        <label class="option-item">
+                            <input type="checkbox" id="uppercase" checked>
+                            <span class="option-label">大写字母</span>
+                            <span class="option-sample">A-Z</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" id="lowercase" checked>
+                            <span class="option-label">小写字母</span>
+                            <span class="option-sample">a-z</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" id="numbers" checked>
+                            <span class="option-label">数字</span>
+                            <span class="option-sample">0-9</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="checkbox" id="symbols">
+                            <span class="option-label">特殊符号</span>
+                            <span class="option-sample">!@#$%</span>
+                        </label>
+                    </div>
+                    
+                    <div class="strength-indicator">
+                        <span class="strength-label">密码强度</span>
+                        <div class="strength-bar">
+                            <div class="strength-segment" id="segment1"></div>
+                            <div class="strength-segment" id="segment2"></div>
+                            <div class="strength-segment" id="segment3"></div>
+                            <div class="strength-segment" id="segment4"></div>
+                        </div>
+                        <div class="strength-text" id="strengthText">请先生成密码</div>
+                    </div>
+                    
+                    <button id="generateBtn" class="btn-primary">生成密码</button>
+                </div>
+            </div>
+
+            <div id="todo-tab" class="tab-content">
+                <div class="tool-section">
+                    <h2 class="tool-title">📝 待办清单</h2>
+                    <p class="tool-desc">高效管理您的日常任务</p>
+                    
+                    <div class="todo-header">
+                        <div class="todo-input-group">
+                            <input type="text" id="todoInput" class="input-field" placeholder="添加新任务...">
+                            <button id="addTodoBtn" class="btn-primary add-btn">添加</button>
+                        </div>
+                    </div>
+                    
+                    <div class="todo-filters">
+                        <button id="filterAll" class="filter-btn active">全部</button>
+                        <button id="filterActive" class="filter-btn">待完成</button>
+                        <button id="filterCompleted" class="filter-btn">已完成</button>
+                        <button id="clearCompletedBtn" class="filter-btn clear-btn">清除已完成</button>
+                    </div>
+                    
+                    <div class="todo-count">
+                        还剩 <span id="todoCount">0</span> 个任务待完成
+                    </div>
+                    
+                    <div id="todoList" class="todo-list"></div>
+                </div>
+            </div>
+
+            <div id="lottery-tab" class="tab-content">
+                <div class="tool-section">
+                    <h2 class="tool-title">🎲 随机抽奖</h2>
+                    <p class="tool-desc">公平公正的随机抽取工具</p>
+                    
+                    <div class="lottery-input-group">
+                        <input type="text" id="lotteryName" class="input-field" placeholder="输入参与者姓名...">
+                        <button id="addLotteryBtn" class="btn-primary add-btn">添加</button>
+                    </div>
+                    
+                    <div id="lotteryResult" class="lottery-result">
+                        <div class="result-label">🎉 中奖者</div>
+                        <div id="winnerName" class="winner-name">---</div>
+                    </div>
+                    
+                    <div id="lotteryList" class="lottery-list"></div>
+                    
+                    <button id="drawBtn" class="btn-primary lottery-draw-btn">开始抽奖</button>
+                </div>
+            </div>
+
+            <div id="stats-tab" class="tab-content">
+                <div class="tool-section">
+                    <h2 class="tool-title">📊 使用统计</h2>
+                    <p class="tool-desc">您的工具使用数据概览</p>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🔐</div>
+                            <div class="stat-value" id="statPassword">0</div>
+                            <div class="stat-label">密码生成次数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📝</div>
+                            <div class="stat-value" id="statTodo">0</div>
+                            <div class="stat-label">待办任务总数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-value" id="statTodoRate">0%</div>
+                            <div class="stat-label">完成率</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎲</div>
+                            <div class="stat-value" id="statLottery">0</div>
+                            <div class="stat-label">抽奖次数</div>
+                        </div>
+                        <div class="stat-card highlight">
+                            <div class="stat-icon">📈</div>
+                            <div class="stat-value" id="statTotal">0</div>
+                            <div class="stat-label">总使用次数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🛠️</div>
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">工具数量</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-tips">
+                        <h3>💡 使用提示</h3>
+                        <ul>
+                            <li>点击导航栏切换不同工具</li>
+                            <li>所有数据自动保存到本地存储</li>
+                            <li>使用导出功能备份您的数据</li>
+                            <li>支持深色/浅色模式切换</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="about-tab" class="tab-content">
+                <div class="tool-section about-section">
+                    <h2 class="tool-title">📄 个人简历</h2>
+                    <p class="tool-desc">点击下方查看或下载完整简历</p>
+                    
+                    <div class="pdf-container">
+                        <iframe src="简历.pdf" class="pdf-iframe" title="个人简历PDF"></iframe>
+                    </div>
+                    
+                    <div class="pdf-actions">
+                        <a href="简历.pdf" download class="btn-primary download-pdf-btn">📥 下载简历PDF</a>
+                        <a href="简历.pdf" target="_blank" class="btn-secondary btn-sm">🔗 新窗口打开</a>
+                    </div>
+                    
+                    <div class="about-footer">
+                        <p>感谢访问我的工具箱！如有问题或建议，欢迎联系我。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>生活效率工具箱 · 安全可靠 · 数据本地存储</p>
+        </div>
     </div>
-    <script>
-        const output = document.getElementById('passwordOutput');
-        const copyBtn = document.getElementById('copyBtn');
-        const slider = document.getElementById('lengthSlider');
-        const lengthValue = document.getElementById('lengthValue');
-        const generateBtn = document.getElementById('generateBtn');
-        const uppercase = document.getElementById('uppercase');
-        const lowercase = document.getElementById('lowercase');
-        const numbers = document.getElementById('numbers');
-        const symbols = document.getElementById('symbols');
-        const segments = document.querySelectorAll('.strength-segment');
-        const strengthText = document.getElementById('strengthText');
-        const charsets = { uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', lowercase: 'abcdefghijklmnopqrstuvwxyz', numbers: '0123456789', symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?' };
-        const strengthLabels = { weak: '弱', medium: '中', strong: '强' };
-        slider.addEventListener('input', () => lengthValue.textContent = slider.value);
-        function generate() {
-            const len = parseInt(slider.value);
-            let charset = '';
-            if (uppercase.checked) charset += charsets.uppercase;
-            if (lowercase.checked) charset += charsets.lowercase;
-            if (numbers.checked) charset += charsets.numbers;
-            if (symbols.checked) charset += charsets.symbols;
-            if (!charset) { alert('请至少选择一种字符类型'); return; }
-            let password = '';
-            const array = new Uint32Array(len);
-            crypto.getRandomValues(array);
-            for (let i = 0; i < len; i++) password += charset[array[i] % charset.length];
-            output.value = password;
-            updateStrength(password);
-        }
-        function updateStrength(pwd) {
-            let score = 0;
-            if (pwd.length >= 8) score++;
-            if (pwd.length >= 12) score++;
-            if (pwd.length >= 16) score++;
-            if (/[a-z]/.test(pwd)) score++;
-            if (/[A-Z]/.test(pwd)) score++;
-            if (/[0-9]/.test(pwd)) score++;
-            if (/[^a-zA-Z0-9]/.test(pwd)) score++;
-            const level = score <= 2 ? 'weak' : score <= 4 ? 'medium' : 'strong';
-            const text = strengthLabels[level];
-            segments.forEach((s, i) => { s.className = 'strength-segment'; if ((level === 'weak' && i < 1) || (level === 'medium' && i < 2) || (level === 'strong' && i < 4)) s.classList.add(level); });
-            strengthText.textContent = text;
-            strengthText.className = `strength-text ${level}`;
-        }
-        async function copy() {
-            if (!output.value) { alert('请先生成密码'); return; }
-            try { await navigator.clipboard.writeText(output.value); copyBtn.textContent = '已复制!'; copyBtn.classList.add('copied'); setTimeout(() => { copyBtn.textContent = '复制'; copyBtn.classList.remove('copied'); }, 2000); }
-            catch { alert('复制失败'); }
-        }
-        generateBtn.addEventListener('click', generate);
-        copyBtn.addEventListener('click', copy);
-        generate();
-    </script>
+
+    <script src="js/storage.js"></script>
+    <script src="js/password.js"></script>
+    <script src="js/todo.js"></script>
+    <script src="js/lottery.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
